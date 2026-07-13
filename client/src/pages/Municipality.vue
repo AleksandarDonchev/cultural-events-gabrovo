@@ -319,7 +319,7 @@ const deleteEvent = async () => {
 
   try {
     const response = await axios.delete(
-      `http://localhost:5000/api/events/${selectedEvent.value._id}`,
+      `${API_URL}/api/events/${selectedEvent.value._id}`,
       getAuthHeaders()
     )
 
@@ -350,7 +350,7 @@ const startEdit = () => {
 const saveEdit = async () => {
   try {
     const response = await axios.put(
-  `http://localhost:5000/api/events/${selectedEvent.value._id}`,
+   `${API_URL}/api/events/${selectedEvent.value._id}`,
   {
     title: editEvent.value.title,
     description: editEvent.value.description,
