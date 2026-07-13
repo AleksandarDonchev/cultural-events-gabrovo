@@ -1,7 +1,7 @@
 const express = require("express")
 const multer = require("multer")
 const path = require("path")
-const Event = require("../models/Event")
+const Event = require("../models/event")
 const { protect, allowRoles } = require("../middleware/authMiddleware")
 
 const router = express.Router()
