@@ -32,6 +32,7 @@ import axios from "axios"
 import { ref } from "vue"
 import { useRouter } from "vue-router"
 
+const API_URL = import.meta.env.VITE_API_URL
 const router = useRouter()
 
 const form = ref({
@@ -42,7 +43,7 @@ const form = ref({
 const login = async () => {
   try {
     const response = await axios.post(
-      "http://localhost:5000/api/auth/login",
+      `${API_URL}/api/auth/login`,
       form.value
     )
 

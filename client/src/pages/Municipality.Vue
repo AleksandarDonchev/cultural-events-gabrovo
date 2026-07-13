@@ -56,7 +56,7 @@
 
     <img
   v-if="event.image"
-  :src="`http://localhost:5000${event.image}`"
+  :src="`${API_URL}${event.image}`"
   alt="Снимка към събитието"
   class="event-image"
 />
@@ -180,7 +180,7 @@ import { computed, onMounted, ref } from "vue"
 import { useRoute } from "vue-router"
 
 
-
+const API_URL = import.meta.env.VITE_API_URL
 const route = useRoute()
 const municipality = route.params.name
 
@@ -211,7 +211,7 @@ const editEvent = ref({
 })
 
 const fetchEvents = async () => {
-  const response = await axios.get("http://localhost:5000/api/events")
+  const response = await axios.get(`${API_URL}/api/events`)
   events.value = response.data
 }
 
@@ -233,7 +233,7 @@ const addEvent = async () => {
   }
 
   const response = await axios.post(
-  "http://localhost:5000/api/events",
+  `${API_URL}/api/events`,
   formData,
   getAuthHeaders()
 )

@@ -39,6 +39,7 @@ import axios from "axios"
 import { ref } from "vue"
 import { useRouter } from "vue-router"
 
+const API_URL = import.meta.env.VITE_API_URL
 const router = useRouter()
 
 const form = ref({
@@ -49,7 +50,7 @@ const form = ref({
 
 const register = async () => {
   try {
-    await axios.post("http://localhost:5000/api/auth/register", form.value)
+    await axios.post(`${API_URL}/api/auth/register`, form.value)
 
     alert("Регистрацията е успешна")
     router.push("/login")
