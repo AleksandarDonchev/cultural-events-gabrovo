@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router"
 
 import Home from "../pages/Home.vue"
-import Municipality from "../pages/Municipality.vue"
+git ls-files client/src/pages
 import Login from "../pages/Login.vue"
 import Register from "../pages/Register.vue"
 
