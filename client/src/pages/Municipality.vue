@@ -87,6 +87,13 @@
     <p class="description">
       {{ event.description }}
     </p>
+
+    <img
+     v-if="event.image"
+     :src="`${API_URL}${event.image}`"
+     alt="Снимка към събитието"
+     class="event-image"
+     />
   </div>
 
   <p v-if="pastEvents.length === 0" class="empty-text">
@@ -113,7 +120,7 @@
         Изтрий
       </button>
 
-      <button class="close-button" @click="closeEvent">
+      <button v-if="!isEditing" class="close-button" @click="closeEvent"; >
         ×
       </button>
     </div>
@@ -158,6 +165,12 @@
         placeholder="Описание"
         required
       ></textarea>
+
+      <input
+  type="file"
+  accept="image/*"
+  @change="handleEditImageChange"
+/>
 
       <div class="edit-buttons">
         <button type="submit" class="save-button">
@@ -210,6 +223,8 @@ const editEvent = ref({
   date: "",
 })
 
+const editImage = ref(null)
+
 const fetchEvents = async () => {
   const response = await axios.get(`${API_URL}/api/events`)
   events.value = response.data
@@ -217,6 +232,10 @@ const fetchEvents = async () => {
 
 const handleImageChange = (event) => {
   newEvent.value.image = event.target.files[0]
+}
+
+const handleEditImageChange = (event) => {
+  editImage.value = event.target.files[0]
 }
 
 const addEvent = async () => {
@@ -349,17 +368,26 @@ const startEdit = () => {
 
 const saveEdit = async () => {
   try {
+    const formData = new FormData()
+
+    formData.append("title", editEvent.value.title)
+    formData.append("description", editEvent.value.description)
+    formData.append("date", editEvent.value.date)
+    formData.append("type", selectedEvent.value.type)
+    formData.append(
+      "municipality",
+      selectedEvent.value.municipality
+    )
+
+    if (editImage.value) {
+      formData.append("image", editImage.value)
+    }
+
     const response = await axios.put(
-   `${API_URL}/api/events/${selectedEvent.value._id}`,
-  {
-    title: editEvent.value.title,
-    description: editEvent.value.description,
-    date: editEvent.value.date,
-    type: selectedEvent.value.type,
-    municipality: selectedEvent.value.municipality,
-  },
-  getAuthHeaders()
-)
+      `${API_URL}/api/events/${selectedEvent.value._id}`,
+      formData,
+      getAuthHeaders()
+    )
 
     const index = events.value.findIndex(
       event => event._id === selectedEvent.value._id
@@ -371,6 +399,7 @@ const saveEdit = async () => {
 
     selectedEvent.value = response.data
     isEditing.value = false
+    editImage.value = null
   } catch (error) {
     console.log(error)
     alert("Грешка при редактиране")

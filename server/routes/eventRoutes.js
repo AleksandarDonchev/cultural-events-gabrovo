@@ -60,12 +60,15 @@ router.put(
   "/:id",
   protect,
   allowRoles("admin", "organizer"),
+  upload.single("image"),
   async (req, res) => {
     try {
       const event = await Event.findById(req.params.id)
 
       if (!event) {
-        return res.status(404).json({ message: "Събитието не е намерено" })
+        return res.status(404).json({
+          message: "Събитието не е намерено",
+        })
       }
 
       if (
@@ -77,15 +80,28 @@ router.put(
         })
       }
 
-      const updatedEvent = await Event.findByIdAndUpdate(
-        req.params.id,
-        req.body,
-        { new: true }
-      )
+      event.title = req.body.title ?? event.title
+      event.description = req.body.description ?? event.description
+      event.date = req.body.date ?? event.date
+      event.type = req.body.type ?? event.type
+      event.municipality =
+        req.body.municipality ?? event.municipality
+
+    
+      if (req.file) {
+        event.image = `/uploads/${req.file.filename}`
+      }
+
+      const updatedEvent = await event.save()
+      
 
       res.json(updatedEvent)
     } catch (error) {
-      res.status(500).json({ message: "Грешка при редактиране на събитие" })
+      console.error("UPDATE ERROR:", error)
+
+      res.status(500).json({
+        message: "Грешка при редактиране на събитие",
+      })
     }
   }
 )
