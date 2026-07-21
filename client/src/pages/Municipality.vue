@@ -201,7 +201,19 @@ const showForm = ref(false)
 const selectedEvent = ref(null)
 const events = ref([])
 
-const currentUser = JSON.parse(localStorage.getItem("user"))
+let currentUser = null
+
+const savedUser = localStorage.getItem("user")
+
+if (savedUser) {
+  try {
+    currentUser = JSON.parse(savedUser)
+  } catch (error) {
+    console.error("Невалидни данни за user в localStorage:", savedUser)
+    localStorage.removeItem("user")
+    localStorage.removeItem("token")
+  }
+}
 
 const canManageEvents =
   currentUser &&
