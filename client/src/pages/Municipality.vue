@@ -52,7 +52,7 @@
 
     <p class="date">{{ formatDate(event.date) }}</p>
 
-    <p class="description">{{ event.description }}</p>
+    <p class="description">{{ shortDescription(event.description) }}</p>
 
     <img
   v-if="event.image"
@@ -85,7 +85,7 @@
     <p class="date past-date">{{ formatDate(event.date) }}</p>
 
     <p class="description">
-      {{ event.description }}
+      {{ shortDescription(event.description) }}
     </p>
 
     <img
@@ -322,6 +322,16 @@ const formattedName = computed(() => {
 const formatDate = (dateString) => {
   const date = new Date(dateString)
   return date.toLocaleDateString("bg-BG")
+}
+
+const shortDescription = (text) => {
+  if (!text) return ""
+
+  if (text.length <= 200) {
+    return text
+  }
+
+  return text.substring(0, 200) + "..."
 }
 
 const openEvent = (event) => {
