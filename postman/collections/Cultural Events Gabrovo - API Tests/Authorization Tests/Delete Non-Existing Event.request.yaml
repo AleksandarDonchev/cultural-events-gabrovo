@@ -1,0 +1,15 @@
+$kind: http-request
+name: 'Delete Non-Existing Event'
+method: DELETE
+url: '{{baseUrl}}/api/events/000000000000000000000000'
+order: 6000
+headers:
+  - key: Authorization
+    value: 'Bearer {{authToken}}'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 404", function () { pm.response.to.have.status(404); });
+      pm.test("Has message property", function () { var json = pm.response.json(); pm.expect(json).to.have.property("message"); });
+      pm.test("Message equals event not found", function () { var json = pm.response.json(); pm.expect(json.message).to.eql("Събитието не е намерено"); });

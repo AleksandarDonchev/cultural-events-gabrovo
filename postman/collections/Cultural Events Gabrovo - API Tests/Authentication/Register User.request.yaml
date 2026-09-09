@@ -1,0 +1,27 @@
+$kind: http-request
+name: 'Register User'
+method: POST
+url: '{{baseUrl}}/api/auth/register'
+order: 1000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "username": "Иван Петров",
+      "email": "ivan.petrov@example.com",
+      "password": "Test1234!"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 201", function () { pm.response.to.have.status(201); });
+      pm.test("Response is JSON", function () { pm.response.to.be.json; });
+      pm.test("Has message property", function () { var json = pm.response.json(); pm.expect(json).to.have.property("message"); });
+      pm.test("Has user property", function () { var json = pm.response.json(); pm.expect(json).to.have.property("user"); });
+      pm.test("User has id", function () { var json = pm.response.json(); pm.expect(json.user).to.have.property("id"); });
+      pm.test("User email matches", function () { var json = pm.response.json(); pm.expect(json.user.email).to.eql("ivan.petrov@example.com"); });
+      pm.test("User role is viewer", function () { var json = pm.response.json(); pm.expect(json.user.role).to.eql("viewer"); });

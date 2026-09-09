@@ -1,0 +1,12 @@
+$kind: http-request
+name: 'Delete Event Without Token'
+method: DELETE
+url: '{{baseUrl}}/api/events/{{eventId}}'
+order: 4000
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 401", function () { pm.response.to.have.status(401); });
+      pm.test("Has message property", function () { var json = pm.response.json(); pm.expect(json).to.have.property("message"); });
+      pm.test("Message equals no token", function () { var json = pm.response.json(); pm.expect(json.message).to.eql("Нямате достъп. Липсва token."); });

@@ -138,7 +138,7 @@
 
       <img
   v-if="selectedEvent.image"
-  :src="`http://localhost:5000${selectedEvent.image}`"
+  :src="`${API_URL}${selectedEvent.image}`"
   alt="Снимка към събитието"
   class="modal-image"
 />

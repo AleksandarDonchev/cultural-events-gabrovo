@@ -1,0 +1,33 @@
+$kind: http-request
+name: 'Create Event With Unauthorized Role'
+method: POST
+url: '{{baseUrl}}/api/events'
+order: 2000
+headers:
+  - key: Authorization
+    value: 'Bearer {{authToken}}'
+body:
+  type: formdata
+  content:
+    - key: title
+      type: text
+      value: 'Тест роля'
+    - key: description
+      type: text
+      value: 'Тест'
+    - key: date
+      type: text
+      value: '2026-10-01'
+    - key: type
+      type: text
+      value: event
+    - key: municipality
+      type: text
+      value: gabrovo
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 403", function () { pm.response.to.have.status(403); });
+      pm.test("Has message property", function () { var json = pm.response.json(); pm.expect(json).to.have.property("message"); });
+      pm.test("Message equals no permission", function () { var json = pm.response.json(); pm.expect(json.message).to.eql("Нямате права за това действие."); });

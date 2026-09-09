@@ -1,0 +1,6 @@
+$kind: collection
+name: Cultural Events Gabrovo - API Tests
+variables:
+  baseUrl: http://localhost:5000
+  authToken: ""
+  eventId: ""

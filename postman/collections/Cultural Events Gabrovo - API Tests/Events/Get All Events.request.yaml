@@ -1,0 +1,12 @@
+$kind: http-request
+name: 'Get All Events'
+method: GET
+url: '{{baseUrl}}/api/events'
+order: 1000
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200", function () { pm.response.to.have.status(200); });
+      pm.test("Response is JSON", function () { pm.response.to.be.json; });
+      pm.test("Response is an array", function () { var json = pm.response.json(); pm.expect(json).to.be.an("array"); });

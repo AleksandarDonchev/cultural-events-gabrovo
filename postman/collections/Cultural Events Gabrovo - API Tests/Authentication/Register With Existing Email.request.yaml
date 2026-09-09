@@ -1,0 +1,23 @@
+$kind: http-request
+name: 'Register With Existing Email'
+method: POST
+url: '{{baseUrl}}/api/auth/register'
+order: 4000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "username": "Дублиран Потребител",
+      "email": "ivan.petrov@example.com",
+      "password": "Test1234!"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 400", function () { pm.response.to.have.status(400); });
+      pm.test("Has message property", function () { var json = pm.response.json(); pm.expect(json).to.have.property("message"); });
+      pm.test("Message equals duplicate email", function () { var json = pm.response.json(); pm.expect(json.message).to.eql("Потребител с този имейл вече съществува"); });
