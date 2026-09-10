@@ -126,6 +126,15 @@ router.delete(
         })
       }
 
+      if (
+  req.user.role === "organizer" &&
+  event.createdBy?.toString() !== req.user.id
+) {
+  return res.status(403).json({
+    message: "Можете да изтривате само собствени събития",
+  })
+}
+
       await Event.findByIdAndDelete(req.params.id)
 
       console.log("EVENT DELETED")
