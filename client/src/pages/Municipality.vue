@@ -618,6 +618,8 @@ h1 {
   display: flex;
   flex-direction: column;
   gap: 15px;
+  max-height: 85vh;
+  overflow-y: auto;
 }
 
 .modal-actions {
