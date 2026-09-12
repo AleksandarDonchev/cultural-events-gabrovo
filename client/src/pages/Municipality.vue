@@ -573,6 +573,7 @@ h1 {
 .description {
   color: #475569;
   line-height: 1.5;
+  white-space: pre-wrap;
 }
 
 .event-image {
